@@ -1,33 +1,91 @@
-console.log("Jesus!");
-console.info("Jesus!!");
-console.error("Jesus!!!");
-console.warn("Jesus!!!!");
+import { addTask, getAllTask } from "./utils/domFunctions.js";
 
-//#################################################################################
-//const - constante - não muda, nunca. A não ser objetos e referências, aí o seu conteúdo pode mudar.
-const nome = 'Michel';
+//Banco de Dados NoSQL - Orientado a documentos. MongoDB, Firebase, Cassandra.
+// Tarefas. Armazenar as tarefas em algum lugar. Por enquanto, estamos armazenamento em memória.
+// usamos ema constante. Armazenamento em memória é volátil
 
-//let - variável - pode mudar a qualquer momento.
-let email = 'email@qualquercoisa';
+// Em localStorege e sessionStorage
 
-//var nome
-//tc39 - grupo de tecnologia ECMA International - responsável EcmaScript - ES2015,....ES2017...ESNEXT - Código intermediário, traduz essa versão mais moderna para uma versão compatível.
-// Transpiladores. BabelJS
-console.log(`Nome: ${nome} Email: ${email}`);
+// NodeJS - MongoDB ou Firebase. Armazenamento em Banco de dados. Armazenamento Persistente.
+// console.log(db[0].steps[2].step)
+// objeto é um conjunto de atributos(ou propriedades) e métodos(ou funções ou ações)
+// items: [{item:1},{item:2},{item:3}]
 
-//###########################################################################################
+const db = [
 
-//objeto.metodo();
-//objeto.propriedade = valor;
+    {
+        id:1,
+        title: 'Concluir Aula 03 Inglês',
+        steps: [
+            { step: "Conversação"},
+            { step: "Leitura e escrita"},
+            { step: "Treino diário"},
 
-//document é um objeto. 
+        ],
+        done: false,
+        dueDate: "2022-05-06",
+        reminder: "2022-05-02 10:00",
+    },
 
-//##########################################################################################
+    {
+        id:2,
+        title: 'Aula projeto de software',
+        steps: [
+            { step: "Avaliação virtual"},
+            { step: "Fórum"},
+            { step: "Pré Aula"},
 
-// Em JavaScript exixtem 7 tipos de erros
+        ],
+        done: false,
+        dueDate: "2022-05-06",
+        reminder: "2022-05-02 10:00",
+    },
 
-// Type Error, Reference Error, Syntax Error, Eval, Range Error, Iternal Error, URIError (URI - Uniform Resource Identifier)
 
-// Type, Reference, Syntax.
+];
 
-//###########################################################################################
+getAllTask(db);
+
+//console.log(db[0].title);
+
+
+const form = document.querySelector("#addNewTask");
+const newTask = document.querySelector("#inputTxtNewTask");
+
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+});
+
+newTask.addEventListener("keyup", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.key == "Enter") {
+        // Se newTask.value for ao contrário de true. Ou seja se for false, se estiver vazio.
+        if (!newTask.value) {
+        alert("Digite uma nova tarefa");
+    } else {
+        //alert(newTask.value);
+
+        const d = new Date();
+        const today = `${d.getDate()}/${d.getMonth() +1}/${d.getFullYear()}`;
+
+        db.push({ 
+            id: Number(db.length) + 1,
+            title: newTask.value,
+            done: false,
+            dueDate: today, 
+        });
+
+        document.querySelector(".tasks").innerHTML="";
+        getAllTask(db);
+
+        newTask.value = "";
+    
+        console.log(db);
+    }
+    }
+});
+
+
+
